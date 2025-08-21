@@ -1,0 +1,62 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.android.zencodegame.demo'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.sqrush.merge"
+        minSdk 23
+        targetSdk 36
+        versionCode 1
+        versionName "1.0.2_mitest"
+    }
+
+    signingConfigs {
+        release() {
+            storeFile=  file("/Users/astroboy/workspace/mcgame/mcgame.keystore")
+            storePassword= "mc2025"
+            keyAlias= "game"
+            keyPassword= "mc2025"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //构建OPPO渠道包需要的依赖
+//    implementation files('libs/gameiapsdk-oppo-release-v1.1.aar')
+
+    //构建小米渠道包需要的依赖
+    implementation files('libs/gameiapsdk-xiaomi-release-v1.1.aar')
+    //构建小米渠道包需要的依赖
+    implementation("com.xiaomi.billingclient:billing:1.1.9")
+
+
+
+}
