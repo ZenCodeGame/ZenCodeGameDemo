@@ -271,7 +271,61 @@ sign=c1f935e949d9174fd127af68e593e827e27089dfdda00631aeebac8814208737
 
 ## 参考 Demo
 ### 1. android demo 工程：[Demo](https://github.com/ZenCodeGame/ZenCodeGameDemo)
-Demo一个Project,clone下来后直接用Android studio打开运行
+Demo一个Project,clone下来后直接用Android studio打开运行，在Demo的代码中，增加了同时构建多个渠道包的配置，如果想一次性构建多个渠道，可以参考相应的配置：
+```
+//增加配置
+android{
+    ....原来的代码
+    // 添加厂商维度
+    flavorDimensions += "vendor"
+    // 定义不同厂商的构建变体
+    productFlavors {
+        create("xiaomi") {
+            dimension = "vendor"
+            // 小米特定的配置
+            manifestPlaceholders["VENDOR_NAME"] = "xiaomi"
+            applicationId = "com.sqrush.merge"
+            versionCode=100
+            versionName="1.0.0_mitest"
+        }
+        create("oppo") {
+            dimension = "vendor"
+            // OPPO特定的配置
+            manifestPlaceholders["VENDOR_NAME"] = "oppo"
+            applicationId = "com.sqrush.merge.gamecenter"
+            versionCode=100
+            versionName="1.0.0"
+        }
+    }
+}
+//调整sdk依赖方式
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    //构建OPPO渠道包需要的依赖
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.1.aar')
+
+    //构建小米渠道包需要的依赖
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.1.aar')
+    //构建小米渠道包需要的依赖
+    "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
+}
+
+```
+调整完配置文件后，如果需要一次性打出多个渠道包，需要执行命令：
+```
+//构建多个渠道包
+./gradlew assembleRelease
+```
+如果构建一个渠道包，需要执行命令：
+```
+//构建OPPO渠道包
+./gradlew assembleOppoRelease
+//构建Xiaomi渠道包
+./gradlew assembleXiaomiRelease
+```
 
 ## 结束语
 ZenCodeGame IAP SDK的接入文档说明，如有任何问题，请随时联系我们。祝生意兴隆！
