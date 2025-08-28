@@ -57,7 +57,7 @@ android {
             dimension = "vendor"
             // OPPO特定的配置
             manifestPlaceholders["VENDOR_NAME"] = "oppo"
-            applicationId = "com.sqrush.merge.gamecenter"
+            applicationId = "com.sqrush.merge"
             versionCode=100
             versionName="1.0.0"
         }
@@ -65,9 +65,10 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
+
+    //IAP SDK依赖的包
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     //构建OPPO渠道包需要的依赖
     "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.1.aar')
