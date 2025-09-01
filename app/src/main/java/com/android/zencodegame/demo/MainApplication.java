@@ -21,6 +21,6 @@ public class MainApplication extends Application {
     private final void onMainCreate() {
         Log.d(TAG, getClass().getSimpleName() + ": onMainCreate = ");
         GameIAPSDK.getInstance().init(this,true);
-        GameIAPSDK.getInstance().setTestModel(true);
+//        GameIAPSDK.getInstance().setTestModel(true);
     }
 }
