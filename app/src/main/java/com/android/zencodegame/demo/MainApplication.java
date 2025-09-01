@@ -20,8 +20,7 @@ public class MainApplication extends Application {
     //主进程
     private final void onMainCreate() {
         Log.d(TAG, getClass().getSimpleName() + ": onMainCreate = ");
-        String appSecret = "5f50f0930c0e48f7aedf7147606e3c65";//oppo渠道接入需要的参数
-        String appId = "10031";
-        GameIAPSDK.getInstance().init(this, appId,appSecret,false);
+        GameIAPSDK.getInstance().init(this,true);
+        GameIAPSDK.getInstance().setTestModel(true);
     }
 }

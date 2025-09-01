@@ -1,11 +1,16 @@
 package com.android.zencodegame.demo;
+import android.app.ComponentCaller;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.game.iap.GameIAPSDK;
@@ -23,6 +28,66 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         findViewById(R.id.test_pay).setOnClickListener(v -> doPay());
+        findViewById(R.id.login).setOnClickListener(v->doLogin());
+        findViewById(R.id.logout).setOnClickListener(v->doLogout());
+        findViewById(R.id.cancel_authorization).setOnClickListener(v->doCancelAuthorization());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"onActivityResult:requestCode="+requestCode+";requestCode="+resultCode);
+        GameIAPSDK.getInstance().onActivityResult(requestCode,resultCode,data);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data, @NonNull ComponentCaller caller) {
+        super.onActivityResult(requestCode, resultCode, data, caller);
+        Log.d(TAG,"onActivityResult:requestCode="+requestCode+";requestCode="+resultCode);
+        GameIAPSDK.getInstance().onActivityResult(requestCode,resultCode,data);
+    }
+
+    private void doCancelAuthorization(){
+        GameIAPSDK.getInstance().doCancelAuthorization(this, new IAPCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(MainActivity.this, "doCancelAuthorization.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String s, int i) {
+                Toast.makeText(MainActivity.this, "doCancelAuthorization.onFailure:" + s + ":code" + i, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void doLogout(){
+        GameIAPSDK.getInstance().doLogout(this, new IAPCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(MainActivity.this, "doLogout.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String s, int i) {
+                Toast.makeText(MainActivity.this, "doLogout.onFailure:" + s + ":code" + i, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void doLogin(){
+        GameIAPSDK.getInstance().doLogin(this, new IAPCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String s, int i) {
+                Toast.makeText(MainActivity.this, "doLogin.onFailure:" + s + ":code" + i, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void doPay() {

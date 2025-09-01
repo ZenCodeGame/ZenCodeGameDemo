@@ -27,6 +27,22 @@
             android:layout_height="50dp"
             android:text="支付" />
 
+        <Button
+            android:id="@+id/login"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="LOGIN"/>
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Logout"/>
+        <Button
+            android:id="@+id/cancel_authorization"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Cancel Authorization"/>
+
     </LinearLayout>
 
 </ScrollView>

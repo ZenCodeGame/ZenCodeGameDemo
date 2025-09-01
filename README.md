@@ -325,6 +325,8 @@ dependencies {
 ./gradlew assembleOppoRelease
 //构建Xiaomi渠道包
 ./gradlew assembleXiaomiRelease
+//构建Huawei渠道包
+./gradlew assembleHuaweiRelease
 ```
 
 ## 结束语
