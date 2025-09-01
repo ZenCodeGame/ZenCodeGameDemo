@@ -4,6 +4,8 @@
 | 版本 | 日期 | 作者 |更新|
 |:-------:|:-------:|:-------:|:-------:|
 | v1.1 | 2025年8月15日 | BIN |完善小米的IAP SDK接入|
+| v1.2 | 2025年9月01日 | BIN |增加华为SDK接入，优化和完善构建脚本和参数设置|
+
 
 
 ## 简介
@@ -13,10 +15,13 @@
 说明：为了减少CP在构建不同厂商的包的时候，不将其他厂商的代码也打包到里面，所以我们采用了不同的厂商的ZenCodeGame IAP的SDK分为不同的aar包，具体的厂商aar包下载地址如下
 
 OPPO厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-oppo-release.aar-v1.1.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.1.aar)
+- gameiapsdk-oppo-release.aar-v1.2.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.2.aar)
 
 小米厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-xiaomi-release-v1.1.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.1.aar)
+- gameiapsdk-xiaomi-release-v1.2.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.2.aar)
+
+华为厂商 enCodeGame IAP Android SDK 下载路径如下：
+- gameiapsdk-huawei-release-v1.2.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.2.aar)
 
 目前支持厂商暂时只有OPPO、小米，后续将会实现对华为、传音等厂商的支持
 
@@ -28,13 +33,24 @@ dependencies {
     //引入com.squareup.okhttp3，ZenCodeGame iap sdk需要依赖这个库 必须添加
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    //引入gameiapsdk-oppo-release-v1.0.aar包 构建OPPO渠道包的时候需要依赖
-    implementation files('libs/gameiapsdk-oppo-release-v1.0.aar') 
+    //构建OPPO渠道包需要的依赖
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.2.aar')
 
-    //引入gameiapsdk-xiaomi-release-v1.0.aar 构建xiaomi渠道包的时候需要依赖
-    implementation files('libs/gameiapsdk-xiaomi-release-v1.0.aar') 
     //构建小米渠道包需要的依赖
-    implementation("com.xiaomi.billingclient:billing:1.1.9")
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.2.aar')
+    //构建小米渠道包需要的依赖
+    "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
+
+
+    //构建Huawei渠道需要依赖的包
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.2.aar"))
+    "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
+    "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
+    "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
+    "huaweiImplementation"("com.auth0:jwks-rsa:0.8.2")
+    "huaweiImplementation"("io.jsonwebtoken:jjwt:0.9.1")
+    "huaweiImplementation"("com.alibaba:fastjson:1.2.60")
+    "huaweiImplementation"("com.google.code.gson:gson:2.8.5")
 }
 ```
 备注：渠道集成SDK对minSdk需要大于23
@@ -60,30 +76,100 @@ android {
 }
 ```
 
-2. SDK初始化，代码如下：
+2. AndroidManifest.xml的新增配置
+```
+<application>
+    <meta-data
+        android:name="app_key" //需要寻找相关对接人员获取 这个配置只有在构建OPPO渠道包的时候需要 如果不接入OPPO渠道的话可以不配置
+        android:value="5afa05530ae846049e31006a7ab88e9e" />
+
+    <meta-data
+        android:name="app_key" //OPPO渠道需要的参数 app_key 对接的时候会提供
+        android:value="${app_key}" />
+    <meta-data
+        android:name="APP_ID" //ZencodeGame平台的应用ID 对接的时候会提供
+        android:value="${APP_ID}" />
+    <meta-data
+        android:name="APP_SECRET" //OPPO渠道需要的参数 APP_SECRET 对接的时候会提供
+        android:value="${APP_SECRET}" />
+</application>
+```
+
+3. 构建华为渠道包的时候需要增加对应应用的agconnect-services.json文件 对接的时候会向华为申请该文件并提供给你们
+
+4. SDK初始化，代码如下：
 ```
 //在游戏的启动入口Application文件中，添加初始化代码
 public class DemoApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //游戏appId="10031" 游戏appId请联系对接人员获得
-        //游戏appSecret="8e692268fa354fcc9c6469f076fe6218" 游戏appId请联系对接人员获得 此参数是OPPO需要的参数，如果不接入OPPO渠道的话，此参数为""
-        String appSecret = "8e692268fa354fcc9c6469f076fe6218";
-        String appId = "10031";
         boolean debug = false; //开启debug的话，会答应更多有关IAP SDK的日志
-        GameIAPSDK.getInstance().init(this, appId,appSecret,debug);
+        GameIAPSDK.getInstance().init(this, debug);
+    }
+}
+
+//在游戏主Activity的onCreate方法中调用SDK的onActivityCreate(this);方法
+//在游戏主Activity的onActivityResult方法中调用SDK的onActivityResult(requestCode,resultCode,data);
+//增加如下代码是为了适配HUAWEI的IAP支付SDK
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        GameIAPSDK.getInstance().onActivityCreate(this);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        GameIAPSDK.getInstance().onActivityResult(requestCode,resultCode,data);
     }
 }
 ```
 
-3. AndroidManifest.xml的新增配置
+5. 华为渠道的IAP支付依赖与华为的账号，所以在接入HUAWEI IAP SDK的时候需要接入华为的账号登陆
 ```
-<application>
-    <meta-data
-        android:name="app_key" //需要寻找相关对接人员获取 这个配置只有在构建OPPO渠道包的时候需要 如果不接入OPPO渠道的话可以不配置
-        android:value="5afa05530ae846049e31006a7ab88e9e" />
-</application>
+//在游戏的账号登录调用SDK的doLogin方法
+private void doLogin(){
+    GameIAPSDK.getInstance().doLogin(this, new IAPCallback() {
+        @Override
+        public void onSuccess(String s) {
+            //登录成功
+            Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, ToastLENGTH_SHORT).show();
+        }
+        @Override
+        public void onFailure(String s, int i) {
+            Toast.makeText(MainActivity.this, "doLogin.onFailure:" + s + ":code" + i,Toast.LENGTH_SHORT).show();
+        }
+    });
+}
+//华为账号接入要求中除了加入登录接口，还需要提供登出和取消授权的入口
+//所以除了调用SDK的doLogin方法外，还需要提供调用SDK的doLogout方法和doCancelAuthorization方法
+
+private void doCancelAuthorization(){
+    GameIAPSDK.getInstance().doCancelAuthorization(this, new IAPCallback() {
+        @Override
+        public void onSuccess(String s) {
+            Toast.makeText(MainActivity.this, "doCancelAuthorization.onSuccess:" + s,Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onFailure(String s, int i) {
+            Toast.makeText(MainActivity.this, "doCancelAuthorization.onFailure:" + s +":code" + i, Toast.LENGTH_SHORT).show();
+        }
+    });
+}
+
+private void doLogout(){
+    GameIAPSDK.getInstance().doLogout(this, new IAPCallback() {
+        @Override
+        public void onSuccess(String s) {
+            Toast.makeText(MainActivity.this, "doLogout.onSuccess:" + s, ToastLENGTH_SHORT).show();
+        }
+        @Override
+        public void onFailure(String s, int i) {
+            Toast.makeText(MainActivity.this, "doLogout.onFailure:" + s + ":code" + i,Toast.LENGTH_SHORT).show();
+        }
+    });
+}
 ```
 
 ## SDK用户发起支付
@@ -172,19 +258,38 @@ private void pay(){
 }
 ```
 
+### 3. 构建HUAWEI渠道包的要求如下
+- 1. 构建包的时候如果开启了混淆，需要在proguard-rules.pro文件中添加如下配置：
+```
+-ignorewarnings
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+-keep class com.huawei.hianalytics.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}
+```
+
 ## 渠道测试环境要求
 
 ### 1. OPPO渠道调试条件要求
 - 1. 需要一部安装了OPPO安全支付插件app的手机,OPPO安全支付插件下载地址：https://docs.zencodegame.com/apks/KeKePay6.7.5.apk
 - 2. 需要将手机语言地区设置成需要测试支付的地区：目前只支持：印度-IN，印度尼西亚-ID，台湾-TW， 越南-VN， 泰国-TH， 菲律宾-PH，  马来西亚-MY。目前支持以上七个地区
 
-### 1. XIAOMI渠道调试条件要求
+### 2. XIAOMI渠道调试条件要求
 - 1. 需要一部小米国际版系统手机
 - 2. 需要安装GetApp应用商店App 版本需要高于25.0.0，下载地址：https://docs.zencodegame.com/apks/com.xiaomi.mipicks.apk
 - 3. 需要将手机语言地区设置成需要测试支付的地区：目前IAP服务支持印尼、俄罗斯、马来西亚、法国、德国、西班牙、巴西、土耳其、菲律宾地区。后续将陆续开通更多国家/地区）
 - 4. 需要注册一个小米帐号，并将小米帐号ID提供给我们，我们将你们的小米帐号ID添加许可测试人员
 - 5. 需要将小米帐号在手机上登录
 - 6. 需要将你们的apk的版本名设置为以“_mitest”命名结尾，如“1.4.1_mitest”；
+
+### 3. HUAWEI渠道调试条件要求
+- 1. 需要一部华为手机
+- 2. 需要注册一个华为账号，并将注册华为账号的手机号码提供给我们，我们将你们的华为账号的手机号码添加为测试账号
+- 3. 需要将华为账号在华为手机上登陆
 
 
 ### 2. 服务端回调接口
@@ -311,13 +416,24 @@ dependencies {
     "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.1.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
+
+    //构建Huawei渠道需要依赖的包
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.2.aar"))
+    "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
+    "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
+    "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
+    "huaweiImplementation"("com.auth0:jwks-rsa:0.8.2")
+    "huaweiImplementation"("io.jsonwebtoken:jjwt:0.9.1")
+    "huaweiImplementation"("com.alibaba:fastjson:1.2.60")
+    "huaweiImplementation"("com.google.code.gson:gson:2.8.5")
+
 }
 
 ```
 调整完配置文件后，如果需要一次性打出多个渠道包，需要执行命令：
 ```
 //构建多个渠道包
-./gradlew assembleRelease
+sh build_all_channels.sh
 ```
 如果构建一个渠道包，需要执行命令：
 ```
