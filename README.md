@@ -385,6 +385,16 @@ android{
     flavorDimensions += "vendor"
     // 定义不同厂商的构建变体
     productFlavors {
+        create("huawei") {
+            dimension = "vendor"
+            // HUAWEI特定的配置
+            applicationId = "com.zencodegame.android.demo"
+            versionCode=100
+            versionName="1.0.0"
+            manifestPlaceholders["app_key"] = ""
+            manifestPlaceholders["APP_ID"] = "10035"
+            manifestPlaceholders["APP_SECRET"] = "115022101"
+        }
         create("xiaomi") {
             dimension = "vendor"
             // 小米特定的配置
@@ -392,6 +402,9 @@ android{
             applicationId = "com.sqrush.merge"
             versionCode=100
             versionName="1.0.0_mitest"
+            manifestPlaceholders["app_key"] = ""
+            manifestPlaceholders["APP_ID"] = "10031"
+            manifestPlaceholders["APP_SECRET"] = ""
         }
         create("oppo") {
             dimension = "vendor"
@@ -400,6 +413,9 @@ android{
             applicationId = "com.sqrush.merge.gamecenter"
             versionCode=100
             versionName="1.0.0"
+            manifestPlaceholders["app_key"] = "af143bdf65324300bfae1a50d04fa7d0"
+            manifestPlaceholders["APP_ID"] = "10031"
+            manifestPlaceholders["APP_SECRET"] = "5f50f0930c0e48f7aedf7147606e3c65"
         }
     }
 }
