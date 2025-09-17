@@ -126,6 +126,35 @@ buildscript {
     <meta-data
         android:name="APP_SECRET" //OPPO渠道需要的参数 APP_SECRET 对接的时候会提供
         android:value="${APP_SECRET}" />
+        
+        
+    //需要在入口Activity增加DeepLink配置
+    <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|fontScale|keyboard|layoutDirection"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Deep Link 配置 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" /> //固定填写这个
+                <data android:host="demo.zencodegame.com" /> //填写与应用名相关的，最好使用包名
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zkgame" /> //固定填写这个
+                <data android:host="demo.zencodegame.com" /> //填写与应用名相关的，最好使用包名
+            </intent-filter>
+        </activity>
 </application>
 ```
 
