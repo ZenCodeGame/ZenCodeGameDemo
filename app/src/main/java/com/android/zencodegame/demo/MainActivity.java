@@ -82,7 +82,17 @@ public class MainActivity extends AppCompatActivity {
         GameIAPSDK.getInstance().doLogin(this, new IAPCallback() {
             @Override
             public void onSuccess(String s) {
+                Log.d(TAG,"onSuccess:"+s);
                 Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+                //登录返回用户数据如下：
+                //{
+                //    "uid":"11000002",
+                //    "name":"斌斌",
+                //    "avatar":"https:\/\/upfile-drcn.platform.hicloud.com\/0nseM8qbg7WZZJg5ey1eiA.OOunvIkxZhUdz7ti92lfjlwHrYZG0P3q1Jduuh5RVAPAbqVAEgzznHmT5J9MA33wg79PXvCKpol4j92nCDkFhi9FQyQixeQ_bqJYkILRxe9sXtldzw.115022101.png"
+                //}
+                //uid是平台账号ID 可作为OpenId关联游戏的用户
+                //用户的昵称
+                //用户的头像
             }
 
             @Override
@@ -108,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         orderInfo.setExtInfo("test_0001");//扩展字段 支付结果回调的时候回原封不动的返回
         orderInfo.setCurrency("USD");//游戏当前的币种
         orderInfo.setCallbackUrl("https://api.gtest4tg.com/payment/callback"); //通知回调接口网址，支付结果会通过这个地址回调通知给服务端
-        orderInfo.setUserId("11000214110"); //游戏的用户ID
+        orderInfo.setUserId("12000214113"); //游戏的用户ID
         GameIAPSDK.getInstance().doPay(this, orderInfo, new IAPCallback() {
             @Override
             public void onSuccess(String s) {

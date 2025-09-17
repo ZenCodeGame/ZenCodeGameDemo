@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-//    id("com.huawei.agconnect")
 }
 
 android {
@@ -8,11 +7,14 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.zencodegame.android.demo"
-        minSdk 23
+        applicationId "com.sqrush.merge"
+        minSdk 24
         targetSdk 36
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 171
+        versionName "1.0.1"
+        manifestPlaceholders["app_key"] = ""
+        manifestPlaceholders["APP_ID"] = "10031"
+        manifestPlaceholders["APP_SECRET"] = ""
     }
 
     signingConfigs {
@@ -49,6 +51,7 @@ android {
     productFlavors {
         create("huawei") {
             dimension = "vendor"
+            apply plugin: "com.huawei.agconnect"
             // HUAWEI特定的配置
             applicationId = "com.zencodegame.android.demo"
             versionCode=100
@@ -80,13 +83,6 @@ android {
     }
 }
 
-// ✅ 这里动态判断，只在构建 huawei 渠道时加载插件
-gradle.startParameter.taskNames.each { task ->
-    if (task.toLowerCase().contains("huawei")) {
-        apply plugin: "com.huawei.agconnect"
-    }
-}
-
 dependencies {
     implementation libs.appcompat
     implementation libs.material
@@ -98,10 +94,9 @@ dependencies {
     //构建小米渠道包需要的依赖
     "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.2.aar')
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
-
+    "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.2.0")
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.2.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.3.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")

@@ -76,7 +76,41 @@ android {
 }
 ```
 
-2. AndroidManifest.xml的新增配置
+2. 华为渠道包需要在Project的settings.gradle文件中添加如下配置：
+```
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        //华为渠道需要的配置
+        maven {
+            url = uri("https://developer.huawei.com/repo/")
+        }
+    }
+}
+```
+
+3. 华为渠道需要在Project的build.gradle文件中添加如下配置：
+```
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        //华为渠道需要的配置
+        maven {
+            url = uri("https://developer.huawei.com/repo/")
+        }
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.0.2")
+        //华为渠道需要的配置
+        classpath("com.huawei.agconnect:agcp:1.5.2.300")
+    }
+}
+```
+
+4. AndroidManifest.xml的新增配置
 ```
 <application>
     <meta-data
@@ -95,9 +129,9 @@ android {
 </application>
 ```
 
-3. 构建华为渠道包的时候需要增加对应应用的agconnect-services.json文件 对接的时候会向华为申请该文件并提供给你们
+5. 构建华为渠道包的时候需要增加对应应用的agconnect-services.json文件 对接的时候会向华为申请该文件并提供给你们
 
-4. SDK初始化，代码如下：
+6. SDK初始化，代码如下：
 ```
 //在游戏的启动入口Application文件中，添加初始化代码
 public class DemoApp extends Application {
@@ -126,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-5. 华为渠道的IAP支付依赖与华为的账号，所以在接入HUAWEI IAP SDK的时候需要接入华为的账号登陆
+7. 华为渠道的IAP支付依赖与华为的账号，所以在接入HUAWEI IAP SDK的时候需要接入华为的账号登陆
 ```
 //在游戏的账号登录调用SDK的doLogin方法
 private void doLogin(){
@@ -135,6 +169,15 @@ private void doLogin(){
         public void onSuccess(String s) {
             //登录成功
             Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, ToastLENGTH_SHORT).show();
+            //登录返回用户数据如下：
+            //{
+            //    "uid":"11000002",
+            //    "name":"斌斌",
+            //    "avatar":"https:\/\/upfile-drcn.platform.hicloud.com\/0nseM8qbg7WZZJg5ey1eiA.OOunvIkxZhUdz7ti92lfjlwHrYZG0P3q1Jduuh5RVAPAbqVAEgzznHmT5J9MA33wg79PXvCKpol4j92nCDkFhi9FQyQixeQ_bqJYkILRxe9sXtldzw.115022101.png"
+            //}
+            //uid是平台账号ID 可作为OpenId关联游戏的用户
+            //用户的昵称
+            //用户的头像
         }
         @Override
         public void onFailure(String s, int i) {
