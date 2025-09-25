@@ -21,7 +21,7 @@ OPPO厂商 ZenCodeGame IAP Android SDK 下载路径如下：
 - gameiapsdk-xiaomi-release-v1.2.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.2.aar)
 
 华为厂商 enCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-huawei-release-v1.2.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.2.aar)
+- gameiapsdk-huawei-release-v1.3.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.3.aar)
 
 目前支持厂商暂时只有OPPO、小米，后续将会实现对华为、传音等厂商的支持
 
@@ -43,7 +43,7 @@ dependencies {
 
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.2.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.3.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
@@ -498,15 +498,15 @@ dependencies {
     implementation libs.material
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.1.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.2.aar')
 
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.1.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.2.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.2.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.3.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
