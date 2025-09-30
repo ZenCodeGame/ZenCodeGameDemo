@@ -36,14 +36,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" />
-                <data android:host="demo.zencodegame.com" />
+                <data android:host="com.sqrush.merge" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="zkgame" />
-                <data android:host="demo.zencodegame.com" />
+                <data android:host="com.sqrush.merge" />
             </intent-filter>
         </activity>
         <meta-data
@@ -55,6 +55,14 @@
         <meta-data
             android:name="APP_SECRET"
             android:value="${APP_SECRET}" />
+        <meta-data
+            android:name="Google_Client_Id"
+            android:value="${Google_Client_Id}"/>
+
+        <meta-data android:name="VKIDClientID" android:value="${VKIDClientID}"/>
+        <meta-data android:name="VKIDClientSecret" android:value="${VKIDClientSecret}"/>
+        <meta-data android:name="VKIDRedirectHost" android:value="${VKIDRedirectHost}"/>
+        <meta-data android:name="VKIDRedirectScheme" android:value="${VKIDRedirectScheme}"/>
     </application>
 
 </manifest>

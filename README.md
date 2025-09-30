@@ -5,6 +5,8 @@
 |:-------:|:-------:|:-------:|:-------:|
 | v1.1 | 2025年8月15日 | BIN |完善小米的IAP SDK接入|
 | v1.2 | 2025年9月01日 | BIN |增加华为SDK接入，优化和完善构建脚本和参数设置|
+| v1.3 | 2025年9月15日 | BIN |完善华为账号登录功能，修复部分bug|
+| v1.4 | 2025年9月30日 | BIN |增加google账号、vk账号、游客账号登录|
 
 
 
@@ -15,13 +17,13 @@
 说明：为了减少CP在构建不同厂商的包的时候，不将其他厂商的代码也打包到里面，所以我们采用了不同的厂商的ZenCodeGame IAP的SDK分为不同的aar包，具体的厂商aar包下载地址如下
 
 OPPO厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-oppo-release.aar-v1.2.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.2.aar)
+- gameiapsdk-oppo-release.aar-v1.4.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.4.aar)
 
 小米厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-xiaomi-release-v1.2.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.2.aar)
+- gameiapsdk-xiaomi-release-v1.4.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.4.aar)
 
 华为厂商 enCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-huawei-release-v1.3.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.3.aar)
+- gameiapsdk-huawei-release-v1.4.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.4.aar)
 
 目前支持厂商暂时只有OPPO、小米，后续将会实现对华为、传音等厂商的支持
 
@@ -34,16 +36,23 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.2.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.4.aar')
 
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.2.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.4.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
+    // Credential Manager 核心库
+    implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
+    // Google ID SDK（Sign in with Google 专用）
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.vk.id:vkid:2.5.1")
+
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.3.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.4.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
@@ -78,6 +87,26 @@ android {
 
 2. 华为渠道包需要在Project的settings.gradle文件中添加如下配置：
 ```
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+        // VK SDK 仓库
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        }
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -86,6 +115,16 @@ dependencyResolutionManagement {
         //华为渠道需要的配置
         maven {
             url = uri("https://developer.huawei.com/repo/")
+        }
+        // VK SDK 仓库
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
         }
     }
 }
@@ -126,7 +165,13 @@ buildscript {
     <meta-data
         android:name="APP_SECRET" //OPPO渠道需要的参数 APP_SECRET 对接的时候会提供
         android:value="${APP_SECRET}" />
-        
+
+    <meta-data android:name="VKIDClientID" android:value="${VKIDClientID}"/> //VK App Client ID 例如：vk54112794
+    <meta-data android:name="VKIDClientSecret" android:value="${VKIDClientSecret}"/> //VK App Client Secret
+
+    <meta-data android:name="VKIDRedirectHost" android:value="${VKIDRedirectHost}"/> //固定填写：vk.ru
+    <meta-data android:name="VKIDRedirectScheme" android:value="${VKIDRedirectScheme}"/> //固定填写：vk+Client ID 例如：vk54112794
+         
         
     //需要在入口Activity增加DeepLink配置
     <activity
@@ -189,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-7. 华为渠道的IAP支付依赖与华为的账号，所以在接入HUAWEI IAP SDK的时候需要接入华为的账号登陆
+7. 华为渠道的IAP支付依赖与华为的账号，所以在接入HUAWEI IAP SDK的时候需要接入华为的账号登陆 华为渠道强制接入， OPPO、VIVO、XIAOMI渠道可以选择接入账号登录：目前账号登录支持：游客登录、Google账号登录（非俄罗斯地区）、VK登录（俄罗斯地区）
 ```
 //在游戏的账号登录调用SDK的doLogin方法
 private void doLogin(){
@@ -466,28 +511,43 @@ android{
             manifestPlaceholders["app_key"] = ""
             manifestPlaceholders["APP_ID"] = "10035"
             manifestPlaceholders["APP_SECRET"] = "115022101"
+            manifestPlaceholders["Google_Client_Id"] = "536019673773-en4onusp7tohrq4blmnmqd4atd714jnm.apps.googleusercontent.com"
+            manifestPlaceholders["VKIDClientID"] = "54112794"
+            manifestPlaceholders["VKIDClientSecret"] = "SSK3q7ZdKI5WPn7zP2f8"
+            manifestPlaceholders["VKIDRedirectHost"] = "vk.ru"
+            manifestPlaceholders["VKIDRedirectScheme"] = "vk54112794"
         }
         create("xiaomi") {
             dimension = "vendor"
             // 小米特定的配置
             manifestPlaceholders["VENDOR_NAME"] = "xiaomi"
-            applicationId = "com.sqrush.merge"
+            applicationId = "com.zencodegame.android.demo"
             versionCode=100
             versionName="1.0.0_mitest"
             manifestPlaceholders["app_key"] = ""
-            manifestPlaceholders["APP_ID"] = "10031"
+            manifestPlaceholders["APP_ID"] = "10035"
             manifestPlaceholders["APP_SECRET"] = ""
+            manifestPlaceholders["Google_Client_Id"] = "536019673773-en4onusp7tohrq4blmnmqd4atd714jnm.apps.googleusercontent.com"
+            manifestPlaceholders["VKIDClientID"] = "54112794"
+            manifestPlaceholders["VKIDClientSecret"] = "SSK3q7ZdKI5WPn7zP2f8"
+            manifestPlaceholders["VKIDRedirectHost"] = "vk.ru"
+            manifestPlaceholders["VKIDRedirectScheme"] = "vk54112794"
         }
         create("oppo") {
             dimension = "vendor"
             // OPPO特定的配置
             manifestPlaceholders["VENDOR_NAME"] = "oppo"
-            applicationId = "com.sqrush.merge.gamecenter"
+            applicationId = "com.zencodegame.android.demo"
             versionCode=100
             versionName="1.0.0"
             manifestPlaceholders["app_key"] = "af143bdf65324300bfae1a50d04fa7d0"
-            manifestPlaceholders["APP_ID"] = "10031"
+            manifestPlaceholders["APP_ID"] = "10035"
             manifestPlaceholders["APP_SECRET"] = "5f50f0930c0e48f7aedf7147606e3c65"
+            manifestPlaceholders["Google_Client_Id"] = "536019673773-en4onusp7tohrq4blmnmqd4atd714jnm.apps.googleusercontent.com"
+            manifestPlaceholders["VKIDClientID"] = "54112794"
+            manifestPlaceholders["VKIDClientSecret"] = "SSK3q7ZdKI5WPn7zP2f8"
+            manifestPlaceholders["VKIDRedirectHost"] = "vk.ru"
+            manifestPlaceholders["VKIDRedirectScheme"] = "vk54112794"
         }
     }
 }
@@ -497,16 +557,23 @@ dependencies {
     implementation libs.appcompat
     implementation libs.material
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // Credential Manager 核心库
+    implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
+    // Google ID SDK（Sign in with Google 专用）
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.vk.id:vkid:2.5.1")
+
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.2.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.4.aar')
 
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.2.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.4.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.3.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.4.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
