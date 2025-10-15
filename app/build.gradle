@@ -108,23 +108,24 @@ dependencies {
 
     //IAP SDK依赖的包
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    // Credential Manager 核心库
-    implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
-    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
-    // Google ID SDK（Sign in with Google 专用）
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-    implementation("com.vk.id:vkid:2.5.1")
+    // Credential Manager 核心库 不接入账号可以添加
+//    implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
+//    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
+    // Google ID SDK（Sign in with Google 专用） 不接入账号可以添加
+//    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    //VK账号登录依赖库 不接入账号可以添加
+//    implementation("com.vk.id:vkid:2.5.1")
 
-//    implementation files('libs/gameiapsdk-xiaomi-release-v1.4.aar')
+//    implementation files('libs/gameiapsdk-xiaomi-release-v1.5.aar')
 //    implementation("com.xiaomi.billingclient:billing:1.2.0")
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.4.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.5.aar')
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.4.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.5.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.2.0")
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.4.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.5.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")

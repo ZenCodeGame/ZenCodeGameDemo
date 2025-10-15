@@ -1,12 +1,13 @@
 # ZenCodeGame IAP Android SDK 对接文档
 
 ## 版本
-| 版本 | 日期 | 作者 |更新|
-|:-------:|:-------:|:-------:|:-------:|
-| v1.1 | 2025年8月15日 | BIN |完善小米的IAP SDK接入|
-| v1.2 | 2025年9月01日 | BIN |增加华为SDK接入，优化和完善构建脚本和参数设置|
-| v1.3 | 2025年9月15日 | BIN |完善华为账号登录功能，修复部分bug|
-| v1.4 | 2025年9月30日 | BIN |增加google账号、vk账号、游客账号登录|
+|  版本  |     日期      | 作者 |            更新            |
+|:----:|:-----------:|:-------:|:------------------------:|
+| v1.1 | 2025年8月15日  | BIN |      完善小米的IAP SDK接入      |
+| v1.2 | 2025年9月01日  | BIN | 增加华为SDK接入，优化和完善构建脚本和参数设置 |
+| v1.3 | 2025年9月15日  | BIN |    完善华为账号登录功能，修复部分bug    |
+| v1.4 | 2025年9月30日  | BIN |  增加google账号、vk账号、游客账号登录  |
+| v1.5 | 2025年10月15日 | BIN |   完善账号接入功能，增加不接入账号的设置    |
 
 
 
@@ -17,13 +18,13 @@
 说明：为了减少CP在构建不同厂商的包的时候，不将其他厂商的代码也打包到里面，所以我们采用了不同的厂商的ZenCodeGame IAP的SDK分为不同的aar包，具体的厂商aar包下载地址如下
 
 OPPO厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-oppo-release.aar-v1.4.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.4.aar)
+- gameiapsdk-oppo-release.aar-v1.5.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.5.aar)
 
 小米厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-xiaomi-release-v1.4.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.4.aar)
+- gameiapsdk-xiaomi-release-v1.5.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.5.aar)
 
 华为厂商 enCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-huawei-release-v1.4.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.4.aar)
+- gameiapsdk-huawei-release-v1.5.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.5.aar)
 
 目前支持厂商暂时只有OPPO、小米，后续将会实现对华为、传音等厂商的支持
 
@@ -36,23 +37,26 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.4.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.5.aar')
 
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.4.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.5.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
-    // Credential Manager 核心库
+    // Credential Manager 核心库 不接入账号可以添加
     implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
     implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
-    // Google ID SDK（Sign in with Google 专用）
+    // Google ID SDK（Sign in with Google 专用） 不接入账号可以添加
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    
+    
+    //VK账号登录依赖 不接入账号可以添加
     implementation("com.vk.id:vkid:2.5.1")
 
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.4.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.5.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
@@ -98,10 +102,11 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        // VK SDK 仓库
+        // VK SDK 仓库 不接入账号可以添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         }
+        // VK SDK 仓库 不接入账号可以添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
         }
@@ -116,13 +121,15 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://developer.huawei.com/repo/")
         }
-        // VK SDK 仓库
+        // VK SDK 仓库 不接入账号可以添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         }
+        // VK SDK 仓库 不接入账号可以添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
         }
+        // VK SDK 仓库 不接入账号可以添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
         }
@@ -213,7 +220,8 @@ public class DemoApp extends Application {
     public void onCreate() {
         super.onCreate();
         boolean debug = false; //开启debug的话，会答应更多有关IAP SDK的日志
-        GameIAPSDK.getInstance().init(this, debug);
+        boolean enableLogin = false; //true表示接入账号登录 false表示不接入账号登录
+        GameIAPSDK.getInstance().init(this,debug,enableLogin);
     }
 }
 
