@@ -44,14 +44,14 @@ dependencies {
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
-    // Credential Manager 核心库 不接入账号可以添加
+    // Credential Manager 核心库 不接入账号可以不添加
     implementation("androidx.credentials:credentials:1.1.0")    // Play Services 支持库（兼容 Android 13 及以下）
     implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha09")
-    // Google ID SDK（Sign in with Google 专用） 不接入账号可以添加
+    // Google ID SDK（Sign in with Google 专用） 不接入账号可以不添加
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     
     
-    //VK账号登录依赖 不接入账号可以添加
+    //VK账号登录依赖 不接入账号可以不添加
     implementation("com.vk.id:vkid:2.5.1")
 
 
@@ -102,11 +102,11 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        // VK SDK 仓库 不接入账号可以添加
+        // VK SDK 仓库 不接入账号可以不添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         }
-        // VK SDK 仓库 不接入账号可以添加
+        // VK SDK 仓库 不接入账号可以不添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
         }
@@ -121,15 +121,15 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://developer.huawei.com/repo/")
         }
-        // VK SDK 仓库 不接入账号可以添加
+        // VK SDK 仓库 不接入账号可以不添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         }
-        // VK SDK 仓库 不接入账号可以添加
+        // VK SDK 仓库 不接入账号可以不添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
         }
-        // VK SDK 仓库 不接入账号可以添加
+        // VK SDK 仓库 不接入账号可以不添加
         maven {
             url = uri("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
         }
