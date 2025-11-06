@@ -21,8 +21,8 @@ public class MainApplication extends Application {
     private final void onMainCreate() {
         Log.d(TAG, getClass().getSimpleName() + ": onMainCreate = ");
 //        GameIAPSDK.getInstance().init(this,true);
-        boolean debug = false; //开启debug的话，会答应更多有关IAP SDK的日志
-        boolean enableLogin = false; //true表示接入账号登录 false表示不接入账号登录
+        boolean debug = true; //开启debug的话，会答应更多有关IAP SDK的日志
+        boolean enableLogin = true; //true表示接入账号登录 false表示不接入账号登录
         GameIAPSDK.getInstance().init(this,debug,enableLogin);
         GameIAPSDK.getInstance().setTestModel(true);
     }

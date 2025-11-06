@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         findViewById(R.id.test_pay).setOnClickListener(v -> doPay());
-        findViewById(R.id.login).setOnClickListener(v->doLogin());
+        findViewById(R.id.login).setOnClickListener(v->{
+            doLogin();
+        });
         findViewById(R.id.logout).setOnClickListener(v->doLogout());
         findViewById(R.id.cancel_authorization).setOnClickListener(v->doCancelAuthorization());
     }

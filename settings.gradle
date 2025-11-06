@@ -10,12 +10,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         // VK SDK 仓库 不接入账号可以添加
-//        maven {
-//            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
-//        }
-//        maven {
-//            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
-//        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        }
     }
 }
 dependencyResolutionManagement {
@@ -27,15 +27,15 @@ dependencyResolutionManagement {
             url = uri("https://developer.huawei.com/repo/")
         }
         // VK SDK 仓库 不接入账号可以添加
-//        maven {
-//            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
-//        }
-//        maven {
-//            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
-//        }
-//        maven {
-//            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
-//        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        }
+        maven {
+            url = uri("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
+        }
     }
 }
 

@@ -11,3 +11,6 @@
 /captures
 .externalNativeBuild
 .cxx
+app/libs/v1.6/gameiapsdk-huawei-release-v1.6.aar
+app/libs/v1.6/gameiapsdk-oppo-release-v1.6.aar
+app/libs/v1.6/gameiapsdk-xiaomi-release-v1.6.aar
