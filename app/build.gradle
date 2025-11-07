@@ -119,13 +119,13 @@ dependencies {
 //    implementation files('libs/gameiapsdk-xiaomi-release-v1.5.aar')
 //    implementation("com.xiaomi.billingclient:billing:1.2.0")
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.6.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.7.aar')
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.6.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.7.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.2.0")
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.6.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.7.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")

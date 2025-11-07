@@ -33,6 +33,11 @@
             android:layout_height="50dp"
             android:text="LOGIN"/>
         <Button
+            android:id="@+id/switchAccount"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="Switch Account"/>
+        <Button
             android:id="@+id/logout"
             android:layout_width="300dp"
             android:layout_height="50dp"

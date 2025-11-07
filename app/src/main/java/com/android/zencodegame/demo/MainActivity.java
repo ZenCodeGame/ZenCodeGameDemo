@@ -33,8 +33,36 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.login).setOnClickListener(v->{
             doLogin();
         });
+        findViewById(R.id.switchAccount).setOnClickListener(v->{
+            switchAccount();
+        });
         findViewById(R.id.logout).setOnClickListener(v->doLogout());
         findViewById(R.id.cancel_authorization).setOnClickListener(v->doCancelAuthorization());
+    }
+
+    private void switchAccount() {
+        GameIAPSDK.getInstance().switchAccount(this, new IAPCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d(TAG,"onSuccess:"+s);
+                Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+                //登录返回用户数据如下：
+                //{
+                //    "uid":"11000002",
+                //    "name":"斌斌",
+                //    "avatar":"https:\/\/upfile-drcn.platform.hicloud.com\/0nseM8qbg7WZZJg5ey1eiA.OOunvIkxZhUdz7ti92lfjlwHrYZG0P3q1Jduuh5RVAPAbqVAEgzznHmT5J9MA33wg79PXvCKpol4j92nCDkFhi9FQyQixeQ_bqJYkILRxe9sXtldzw.115022101.png"
+                //}
+                //uid是平台账号ID 可作为OpenId关联游戏的用户
+                //用户的昵称
+                //用户的头像
+            }
+
+            @Override
+            public void onFailure(String s, int i) {
+                Toast.makeText(MainActivity.this, "doLogin.onFailure:" + s + ":code" + i, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

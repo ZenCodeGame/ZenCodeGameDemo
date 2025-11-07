@@ -9,6 +9,7 @@
 | v1.4 | 2025年9月30日  | BIN |  增加google账号、vk账号、游客账号登录  |
 | v1.5 | 2025年10月15日 | BIN |   完善账号接入功能，增加不接入账号的设置    |
 | v1.6 | 2025年11月6日  | BIN |       修复登录模块存在的BUG       |
+| v1.7 | 2025年11月7日  | BIN |    优化用户登录体验，增加账号切换功能     |
 
 
 
@@ -19,13 +20,13 @@
 说明：为了减少CP在构建不同厂商的包的时候，不将其他厂商的代码也打包到里面，所以我们采用了不同的厂商的ZenCodeGame IAP的SDK分为不同的aar包，具体的厂商aar包下载地址如下
 
 OPPO厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-oppo-release.aar-v1.6.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.6.aar)
+- gameiapsdk-oppo-release.aar-v1.7.aar 下载地址：[ZenCodeGame IAP Android SDK OPPO](https://docs.zencodegame.com/aar/gameiapsdk-oppo-release-v1.7.aar)
 
 小米厂商 ZenCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-xiaomi-release-v1.6.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.6.aar)
+- gameiapsdk-xiaomi-release-v1.7.aar  下载地址：[ZenCodeGame IAP Android SDK XIAOMI](https://docs.zencodegame.com/aar/gameiapsdk-xiaomi-release-v1.7.aar)
 
 华为厂商 enCodeGame IAP Android SDK 下载路径如下：
-- gameiapsdk-huawei-release-v1.6.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.6.aar)
+- gameiapsdk-huawei-release-v1.7.aar  下载地址：[ZenCodeGame IAP Android SDK HUAWEI](https://docs.zencodegame.com/aar/gameiapsdk-huawei-release-v1.7.aar)
 
 目前支持厂商暂时只有OPPO、小米，后续将会实现对华为、传音等厂商的支持
 
@@ -38,10 +39,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     //构建OPPO渠道包需要的依赖
-    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.6.aar')
+    "oppoImplementation" files('libs/gameiapsdk-oppo-release-v1.7.aar')
 
     //构建小米渠道包需要的依赖
-    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.6.aar')
+    "xiaomiImplementation" files('libs/gameiapsdk-xiaomi-release-v1.7.aar')
     //构建小米渠道包需要的依赖
     "xiaomiImplementation"("com.xiaomi.billingclient:billing:1.1.9")
 
@@ -57,7 +58,7 @@ dependencies {
 
 
     //构建Huawei渠道需要依赖的包
-    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.6.aar"))
+    "huaweiImplementation"(files("libs/gameiapsdk-huawei-release-v1.7.aar"))
     "huaweiImplementation"("com.huawei.hms:iap:6.13.0.300")
     "huaweiImplementation"("com.huawei.agconnect:agconnect-core:1.5.2.300")
     "huaweiImplementation"("com.huawei.hms:hwid:5.3.0.302")
@@ -296,6 +297,31 @@ private void doLogout(){
         }
     });
 }
+
+//增加账号切换接口，并与用户切换账号
+ private void switchAccount() {
+      GameIAPSDK.getInstance().switchAccount(this, new IAPCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d(TAG,"onSuccess:"+s);
+                Toast.makeText(MainActivity.this, "doLogin.onSuccess:" + s, Toast.LENGTH_SHORT).show();
+                //登录返回用户数据如下：
+                //{
+                //    "uid":"11000002",
+                //    "name":"斌斌",
+                //    "avatar":"https:\/\/upfile-drcn.platform.hicloud.com\/0nseM8qbg7WZZJg5ey1eiA.OOunvIkxZhUdz7ti92lfjlwHrYZG0P3q1Jduuh5RVAPAbqVAEgzznHmT5J9MA33wg79PXvCKpol4j92nCDkFhi9FQyQixeQ_bqJYkILRxe9sXtldzw.115022101.png"
+                //}
+                //uid是平台账号ID 可作为OpenId关联游戏的用户
+                //用户的昵称
+                //用户的头像
+            }
+
+            @Override
+            public void onFailure(String s, int i) {
+                Toast.makeText(MainActivity.this, "doLogin.onFailure:" + s + ":code" + i, Toast.LENGTH_SHORT).show();
+            }
+      });
+ }
 ```
 
 ## SDK用户发起支付
